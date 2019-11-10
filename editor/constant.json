@@ -1,0 +1,8 @@
+{
+  "ReservedWord": [
+    "user"
+  ],
+  "Messages": {
+    "DuplicateId": "重複しているIDです"
+  }
+}
