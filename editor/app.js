@@ -7,6 +7,7 @@ var sassMiddleware = require('node-sass-middleware');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var signupRouter = require('./routes/signup');
 
 var app = express();
 
@@ -26,6 +27,27 @@ app.use(sassMiddleware({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// session check
+// make dictionary area for response
+app.use(function(req, res, next){
+  res.params = {
+    // title
+    title: 'no title'
+  };
+  // login user exist
+  if(req.user){
+    collection('users').findOne({userId: req.user.userId}, function(err, doc){
+      res.params.user = doc;
+      next();
+    });
+  // login user doesnt exist
+  }else{
+    res.params.user = null;
+    next();
+  }
+});
+
+app.use('/signup', signupRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
